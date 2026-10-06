@@ -1,13 +1,12 @@
 # Windows & Active Directory Home Lab
 
-> A virtualized Windows Server environment to practice Active Directory administration, Group Policy hardening, PowerShell automation and monitoring. It is the foundation reused as the target domain in my [SOC Home Lab](https://github.com/Yassine-ElJide/soc-home-lab).
+> A virtualized Windows Server environment to practice Active Directory administration, Group Policy hardening, PowerShell automation. It is the foundation reused as the target domain in my [SOC Home Lab](https://github.com/Yassine-ElJide/soc-home-lab).
 
 ## Architecture
 
 ```mermaid
 flowchart LR
   DC[DC-01 · soc.local<br>Windows Server 2016<br>AD DS · DNS · DHCP] --> C[WIN-01<br>Windows 11<br>domain workstation]
-  DC --> Z[Zabbix<br>monitoring]
   PS[PowerShell scripts] --> DC
   GPO[Group Policy] --> DC
 ```
@@ -16,14 +15,12 @@ flowchart LR
 | --- | --- | --- |
 | DC-01 | AD DS, DNS, DHCP for domain `soc.local` | Windows Server 2016 |
 | WIN-01 | Domain workstation | Windows 11 Pro |
-| ZBX-01 | Monitoring server | Ubuntu + Zabbix |
 
 ## Stack
-- **VMware / VirtualBox**: virtualization
+- **VirtualBox**: virtualization
 - **Windows Server 2016**: AD DS, DNS, DHCP
 - **Group Policy (GPO)**: security and configuration baseline
 - **PowerShell**: provisioning and reporting automation
-- **Zabbix**: availability and performance monitoring
 
 ## Automation scripts
 | Script | Purpose |
