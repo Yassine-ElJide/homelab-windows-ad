@@ -1,6 +1,6 @@
 # Windows & Active Directory Home Lab
 
-> A virtualized Windows Server environment to practice Active Directory administration, Group Policy hardening, PowerShell automation and monitoring — the foundation reused as the target domain in my [SOC Home Lab](https://github.com/Yassine-ElJide/soc-home-lab).
+> A virtualized Windows Server environment to practice Active Directory administration, Group Policy hardening, PowerShell automation and monitoring. It is the foundation reused as the target domain in my [SOC Home Lab](https://github.com/Yassine-ElJide/soc-home-lab).
 
 ## Architecture
 
@@ -14,16 +14,16 @@ flowchart LR
 
 | Host | Role | OS |
 | --- | --- | --- |
-| DC-01 | AD DS, DNS, DHCP — domain `soc.local` | Windows Server 2016 |
+| DC-01 | AD DS, DNS, DHCP for domain `soc.local` | Windows Server 2016 |
 | WIN-01 | Domain workstation | Windows 11 Pro |
 | ZBX-01 | Monitoring server | Ubuntu + Zabbix |
 
 ## Stack
-- **VMware / VirtualBox** – virtualization
-- **Windows Server 2016** – AD DS, DNS, DHCP
-- **Group Policy (GPO)** – security and configuration baseline
-- **PowerShell** – provisioning and reporting automation
-- **Zabbix** – availability and performance monitoring
+- **VMware / VirtualBox**: virtualization
+- **Windows Server 2016**: AD DS, DNS, DHCP
+- **Group Policy (GPO)**: security and configuration baseline
+- **PowerShell**: provisioning and reporting automation
+- **Zabbix**: availability and performance monitoring
 
 ## Automation scripts
 | Script | Purpose |
@@ -54,14 +54,14 @@ See [`gpo/baseline.md`](gpo/baseline.md) for the full baseline and rationale.
 | GPO | Scope | Purpose | ATT&CK mitigation |
 | --- | --- | --- | --- |
 | Password & Lockout Policy | Domain | 14-char minimum, lockout after 5 failures | T1110 Brute force |
-| Audit Policy | Domain Controllers | Enable logon / account-mgmt / Kerberos auditing (feeds the SOC lab) | Detection |
+| Audit Policy | Domain Controllers | Enable logon, credential validation, account-mgmt and Kerberos auditing (feeds the SOC lab) | Detection |
 | USB Storage Restriction | Workstations | Block removable storage write | T1052 Exfil over USB |
 | Disable SMBv1 | All | Remove legacy SMB | T1210 Exploitation |
-| Screen Lock | Users | 10-min inactivity lock | T1078 Valid accounts |
+| Screen Lock | Workstations | 10-min inactivity lock | Unattended session abuse |
 
 ## What I learned
 - Designing an OU tree so GPOs and delegation map to the org, not to individual objects.
-- PowerShell for repeatable provisioning — creating 20+ users from a CSV in seconds and keeping it idempotent.
+- PowerShell for repeatable provisioning: creating users from a CSV in seconds and keeping it idempotent.
 - Why DC audit policy is the prerequisite for everything in the SOC lab: no auditing, no alerts.
 
 ## Next steps
