@@ -1,0 +1,9 @@
+FirstName,LastName,SamAccountName,Department,Title,Group
+Alice,Martin,amartin,IT,Systems Administrator,IT-Admins
+Brahim,Haddad,bhaddad,IT,Help Desk,IT-Support
+Chloe,Dubois,cdubois,Finance,Accountant,Finance-Users
+David,Nguyen,dnguyen,Finance,Controller,Finance-Users
+Emma,Leroy,eleroy,HR,HR Specialist,HR-Users
+Farid,Benali,fbenali,HR,Recruiter,HR-Users
+Giulia,Rossi,grossi,IT,Network Engineer,IT-Admins
+Hugo,Moreau,hmoreau,Finance,Analyst,Finance-Users
