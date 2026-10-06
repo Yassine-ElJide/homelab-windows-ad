@@ -2,9 +2,9 @@
 .SYNOPSIS
     Audit members of privileged AD groups and export to CSV.
 .DESCRIPTION
-    Lists effective (recursive) members of Tier-0 groups. Read-only.
-    Run regularly and diff the output to catch unexpected privilege changes
-    (pairs with Wazuh rule 100100 in the SOC lab).
+    Lists effective (recursive) members of Tier-0 groups: users, computers and
+    service accounts. Read-only. Run regularly and diff the output to catch
+    unexpected privilege changes (pairs with Wazuh rule 100100 in the SOC lab).
 .EXAMPLE
     .\Get-PrivilegedGroupMembers.ps1 | Export-Csv priv-members.csv -NoTypeInformation
 #>
@@ -17,9 +17,17 @@ Import-Module ActiveDirectory
 
 foreach ($g in $Groups) {
     try {
-        Get-ADGroupMember -Identity $g -Recursive |
-            Get-ADUser -Properties Enabled, LastLogonDate |
-            Select-Object @{N='Group';E={$g}}, SamAccountName, Name, Enabled, LastLogonDate
+        Get-ADGroupMember -Identity $g -Recursive -ErrorAction Stop | ForEach-Object {
+            $obj = Get-ADObject -Identity $_.distinguishedName -Properties sAMAccountName, userAccountControl, lastLogonTimestamp
+            [pscustomobject]@{
+                Group          = $g
+                SamAccountName = $obj.sAMAccountName
+                Name           = $obj.Name
+                ObjectClass    = $obj.ObjectClass
+                Enabled        = -not ($obj.userAccountControl -band 2)
+                LastLogonDate  = if ($obj.lastLogonTimestamp) { [DateTime]::FromFileTime($obj.lastLogonTimestamp) } else { $null }
+            }
+        }
     }
     catch {
         Write-Warning "Could not read group '$g': $_"
