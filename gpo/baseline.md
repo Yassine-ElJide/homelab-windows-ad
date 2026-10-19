@@ -1,8 +1,9 @@
 # GPO security baseline
 
-Baseline applied in the lab, with the reasoning and the GPMC path for each setting. Values chosen to be defensible in an interview, not just "max everything".
+Baseline applied in the lab, with the reasoning and the GPMC path for each setting. Each value is a deliberate trade-off between security and usability, not the strictest setting available.
 
 ## 1. Password & Account Lockout (scope: Domain)
+
 `Computer Configuration > Policies > Windows Settings > Security Settings > Account Policies`
 
 | Setting | Value | Why |
@@ -14,6 +15,7 @@ Baseline applied in the lab, with the reasoning and the GPMC path for each setti
 | Lockout duration / reset | 15 min | Balances security and help-desk load |
 
 ## 2. Advanced Audit Policy (scope: Domain Controllers)
+
 `...Security Settings > Advanced Audit Policy Configuration > Audit Policies`
 
 | Subcategory | Setting | Feeds |
@@ -30,19 +32,26 @@ Also set `Security Options > Audit: Force audit policy subcategory settings` to 
 > This GPO is the prerequisite for the whole SOC lab. Without it the detections have no events.
 
 ## 3. USB Storage Restriction (scope: Workstations)
+
 `Computer Configuration > Policies > Administrative Templates > System > Removable Storage Access`
+
 - *Removable Disks: Deny write access* → **Enabled** (mitigates T1052 exfiltration over USB)
 
 ## 4. Disable SMBv1 (scope: All)
+
 `Administrative Templates > MS Security Guide > Configure SMB v1 server` → **Disabled** and `Configure SMB v1 client driver` → **Disable driver**
+
 - The MS Security Guide templates come from the Microsoft Security Compliance Toolkit (`SecGuide.admx/adml`), copy them to the Central Store first.
 - Removes a legacy, exploitable protocol (T1210).
 
 ## 5. Interactive Screen Lock (scope: Workstations)
+
 `...Security Options > Interactive logon: Machine inactivity limit` → **600 seconds**
+
 - Computer setting, so the GPO is linked to the Workstations OU. Limits unattended-session abuse.
 
 ## Verify after applying
+
 ```powershell
 gpupdate /force
 gpresult /h gpreport.html          # effective policy on a client
