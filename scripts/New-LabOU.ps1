@@ -14,6 +14,7 @@ param(
 Import-Module ActiveDirectory
 
 function New-OUIfMissing {
+    [CmdletBinding(SupportsShouldProcess)]
     param([string]$Name, [string]$Path)
     $dn = "OU=$Name,$Path"
     if (Get-ADOrganizationalUnit -Filter "DistinguishedName -eq '$dn'" -ErrorAction SilentlyContinue) {
