@@ -1,0 +1,14 @@
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Script outputs: contain real account names when run on a domain
+*.csv
+!scripts/users.csv
+gpreport.html
+
+# Secrets
+.env
+*.pfx
